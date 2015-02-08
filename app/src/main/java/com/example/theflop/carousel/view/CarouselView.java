@@ -7,9 +7,9 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -21,11 +21,10 @@ import java.util.List;
  * Carousel with animation for the most centered child view
  */
 public class CarouselView extends HorizontalScrollView {
-    private List<View> viewList;
     private LinearLayout internalWrapper;
 
     // Constants
-    private Integer LANDSCAPE_PADDING = 400;
+    private Integer LANDSCAPE_PADDING = 300;
     private Integer PORTRAIT_PADDING = 200;
 
     public CarouselView(Context context) {
@@ -44,22 +43,17 @@ public class CarouselView extends HorizontalScrollView {
     }
 
     public void setItems(List<View> views) {
-        this.viewList = views;
         internalWrapper = new LinearLayout(getContext());
         internalWrapper.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         internalWrapper.setOrientation(LinearLayout.HORIZONTAL);
-        internalWrapper.setPadding(LANDSCAPE_PADDING, 0, LANDSCAPE_PADDING, 0);
 
         addView(internalWrapper);
 
         for (View view : views) {
-            view.setPadding(0, 50, 0 , 50);
+            view.setPadding(0, 50, 0, 50);
             internalWrapper.addView(view);
         }
-
-        WindowManager windowManager =  (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
-        Configuration config = getResources().getConfiguration();
-        setLayoutPadding(config);
+        this.setFillViewport(true);
     }
 
     @Override
@@ -78,10 +72,10 @@ public class CarouselView extends HorizontalScrollView {
     private void setLayoutPadding(Configuration config) {
         switch(config.orientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
-                internalWrapper.setPadding(LANDSCAPE_PADDING,0,LANDSCAPE_PADDING,0);
+                //internalWrapper.setPadding(LANDSCAPE_PADDING,0,LANDSCAPE_PADDING,0);
                 break;
             case Configuration.ORIENTATION_PORTRAIT:
-                internalWrapper.setPadding(PORTRAIT_PADDING,0,PORTRAIT_PADDING,0);
+                //internalWrapper.setPadding(PORTRAIT_PADDING,0,PORTRAIT_PADDING,0);
                 break;
         }
     }
@@ -104,7 +98,7 @@ public class CarouselView extends HorizontalScrollView {
                 } else {
                     view.setScaleX(1f);
                     view.setScaleY(1f);
-                    view.setAlpha(0.5f);
+                   view.setAlpha(0.5f);
                     view.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
